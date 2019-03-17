@@ -1,1 +1,1 @@
-# browswer-game-server
+# browswer-game

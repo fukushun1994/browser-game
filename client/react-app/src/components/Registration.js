@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Card, CardHeader, CardContent, Button, TextField, Typography } from '@material-ui/core';
-
+import { connect } from 'react-redux';
+import { REGISTER_USER } from '../constants/ActionTypes'
+import { registerUser } from '../actions';
 
 class Registration extends Component {
     constructor(props) {
@@ -47,7 +49,7 @@ class Registration extends Component {
                         className={classes.button}
                         variant="contained"
                         color="primary"
-                        onClick={this.onRegister}
+                        onClick={() => this.onRegister()}
                         disabled={!this.validateName() || !this.validatePassword()}
                     >
                         登録
@@ -67,6 +69,8 @@ class Registration extends Component {
 
     onRegister() {
         //TODO: ユーザ登録APIを叩く
+        console.log('here');
+        this.props.dispatch(registerUser(this.state.name, this.state.password));
     }
 }
 
@@ -89,4 +93,4 @@ const styles = theme => ({
     },
 });
 
-export default withStyles(styles)(Registration);
+export default connect()(withStyles(styles)(Registration));

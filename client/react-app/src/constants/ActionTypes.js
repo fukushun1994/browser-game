@@ -1,4 +1,5 @@
 export const REQUEST_REGISTER_USER = 'REQUEST_REGISTER_USER';
 export const RECEIVE_REGISTER_USER = 'RECEIVE_REGISTER_USER';
-export const LOGIN = 'LOGIN';
-export const LOGOU = 'LOGOUT';
+export const REQUEST_LOGIN = 'REQUEST_LOGIN';
+export const RECEIVE_LOGIN = 'RECEIVE_LOGIN';
+export const LOGOUT = 'LOGOUT';

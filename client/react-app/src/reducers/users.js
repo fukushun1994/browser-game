@@ -1,10 +1,11 @@
-import { REQUEST_REGISTER_USER, RECEIVE_REGISTER_USER } from "../constants/ActionTypes";
+import { REQUEST_REGISTER_USER, RECEIVE_REGISTER_USER, REQUEST_LOGIN, RECEIVE_LOGIN, LOGOUT} from "../constants/ActionTypes";
 
 const initialState = {
     isRegistering: false,
     isLoggingIn: false,
     isLoggingOut: false,
-    user_id: 0,
+    isLoggedIn: false,
+    token: '',
     error: null
 };
 
@@ -14,24 +15,34 @@ export default (state=initialState, action) => {
             return {
                 ...state,
                 isRegistering: true
-            }
+            };
         case RECEIVE_REGISTER_USER:
-            if (action.status === 'success') {
-                return {
-                    ...state,
-                    isRegistering: false,
-                    userId: action.userId,
-                    error: null
-                }
-            } else if (action.status === 'error'){
-                return {
-                    ...state,
-                    isRegistering: false,
-                    error: action.error
-                }
-            }
+            return {
+                ...state,
+                isRegistering: false,
+                error: (action.status === 'success' ? null : action.error)
+            };
+
+        case REQUEST_LOGIN:
+            return {
+                ...state,
+                isLoggingIn: true
+            };
+        case RECEIVE_LOGIN:
+            return {
+                ...state,
+                isLoggingIn: false,
+                token: (action.status === 'success' ? action.token : ''),
+                isLoggedIn: action.status === 'success',
+                error: (action.status === 'success' ? null : action.error)
+            };
+        case LOGOUT:
+            return {
+                ...state,
+                isLoggedIn: false
+            };
          default:
-            return state
+            return state;
     }
 }
 

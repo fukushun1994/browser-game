@@ -6,7 +6,9 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { logout } from '../actions';
 
 class Header extends Component {
 
@@ -22,12 +24,15 @@ class Header extends Component {
             <Typography className={classes.grow} variant="h6" color="inherit">
               <Link to="/" style={{ textDecoration: "none", color: "white"}} >ブラウザハクスラ（仮）</Link>
             </Typography>
-            <Button type="button" color="inherit" href="/registration">ユーザ登録</Button>
-            <Button type="button" color="inherit" href="/login">ログイン</Button>
+            { this.props.users.isLoggedIn ? <Button type="button" color="inherit" onClick={ () => this.onLogout() }>ログアウト</Button> : '' }
           </Toolbar>
         </AppBar>
       </div>
     );
+  }
+
+  onLogout() {
+    this.props.dispatch(logout());
   }
 }
 
@@ -44,4 +49,4 @@ const styles = {
   },
 };
 
-export default withStyles(styles)(Header);
+export default connect(state => state)(withStyles(styles)(Header));

@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
+import RegistrationCard from './RegistrationCard';
+import LoginCard from './LoginCard';
+import { connect } from 'react-redux';
 
 class Top extends Component {
     render() {
-        return (
-            <div>
-                Topページ
-            </div>
-        )
+        if (this.props.users.isLoggedIn) {
+            return (
+                <div>
+                    Topページ
+                </div>
+            );
+        } else {
+            return (
+                <div style={{textAlign: 'center'}}>
+                    <RegistrationCard />
+                    <LoginCard />
+                </div>
+            );
+        }
     }
 }
-export default Top;
+export default connect( state => state )(Top);

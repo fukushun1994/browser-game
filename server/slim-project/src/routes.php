@@ -15,10 +15,10 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
 $app->post('/users', function (Request $request, Response $response, array $args) {
     $db = $this->db;
     $parsedBody = $request->getParsedBody();
-
+    
     $sth = $db->prepare('INSERT INTO users (user_name, password_hash) VALUES (:user_name, :password_hash)');
     $sth->bindParam(':user_name', $parsedBody['user_name']);
-    $sth->bindParam(':password_hash', password_hash($parsedBody['passowrd'], PASSWORD_DEFAULT));
+    $sth->bindParam(':password_hash', password_hash($parsedBody['password'], PASSWORD_DEFAULT));
     $result = $sth->execute();
     if ($result) {
         return $response->withJson(
@@ -30,7 +30,7 @@ $app->post('/users', function (Request $request, Response $response, array $args
     } else {
         return $response->withStatus(500);
     }
-})->setName('registerUser');
+});
 
 // login
 $app->post('/login', function (Request $request, Response $response, array $args) {
@@ -38,17 +38,21 @@ $app->post('/login', function (Request $request, Response $response, array $args
     $db = $this->db;
     $parsedBody = $request->getParsedBody();
     
-    $sth = $db->prepare('SELECT * FROM users WHERE user_name=:user_name AND password_hash=:password_hash');
+    $sth = $db->prepare('SELECT id, password_hash FROM users WHERE user_name=:user_name');
     $sth->bindParam(':user_name', $parsedBody['user_name']);
-    $sth->bindParam(':password_hash', password_hash($parsedBody['passowrd'], PASSWORD_DEFAULT));
-    $row = $sth->execute();
+    $sth->execute();
+
+    $row = $sth->fetch();
     if ($row) {
+        if (!password_verify($parsedBody['password'], $row['password_hash'])){
+            return $response->withStatus(401);
+        }
         $EXP = 86400;
         $currentTime = time();
         $claims = [
             'nbf' => $currentTime,
             'exp' => $currentTime + $EXP,
-            'user_id' => (int)$row['user_id'],
+            'user_id' => (int)$row['id'],
         ];
         $private_key = file_get_contents('../credentials/jwt.key');
         $token = JWT::encode($claims, $private_key, 'RS256');
@@ -60,8 +64,10 @@ $app->post('/login', function (Request $request, Response $response, array $args
             ],
             200
         );
+    } else {
+        return $response->withStatus(401);
     }
-})->setName('login');
+});
 
 $auth_middleware = function ($req, $res, $next) {
     if (!$req->hasHeader('Authorization')) {

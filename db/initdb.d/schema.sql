@@ -1,5 +1,3 @@
-CREATE DATABASE browser_game;
-
 CREATE TABLE users(
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     user_name VARCHAR(32) UNIQUE,
@@ -24,5 +22,5 @@ CREATE TABLE enemies(
     name VARCHAR(64),
     hp INTEGER,
     atk INTEGER,
-    def INTEGER,
+    def INTEGER
 )ENGINE=InnoDB;

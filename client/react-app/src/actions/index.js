@@ -6,15 +6,30 @@ const requestRegister = () => {
         type: REQUEST_REGISTER_USER
     }
 }
-const receiveRegister = () => {
+const receiveRegister = (response) => {
     return {
-        type: RECEIVE_REGISTER_USER
+        type: RECEIVE_REGISTER_USER,
+        status: 'success',
+        userId: response.data.user_id
     }
 }
+const errorRegister = (err) => {
+    return {
+        type: RECEIVE_REGISTER_USER,
+        status: 'error',
+        error: err
+    }
+}
+
 export const registerUser = (userName, password) => {
     return async (dispatch) => {
         dispatch(requestRegister());
-        const response = await UsersAPI.registerUser(userName, password).catch((err) => console.log(err));
-        dispatch(receiveRegister());
+        return UsersAPI.registerUser(userName, password)
+        .then(
+            (response) => dispatch(receiveRegister(response))
+        )
+        .catch(
+            (err) => dispatch(errorRegister(err))
+        );
     }
 }

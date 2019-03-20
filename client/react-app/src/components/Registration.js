@@ -11,6 +11,7 @@ class Registration extends Component {
         this.state = {
             name: '',
             password: '',
+            showAlert: false
         };
         this.reName = new RegExp('^\\w{3,32}$');
         this.rePassword = new RegExp('^\\w{6,}$');
@@ -67,21 +68,30 @@ class Registration extends Component {
         return this.rePassword.test(this.state.password);
     }
 
-    onRegister() {
-        //TODO: ユーザ登録APIを叩く
-        console.log('here');
-        this.props.dispatch(registerUser(this.state.name, this.state.password));
+    async onRegister() {
+        await this.props.dispatch(registerUser(this.state.name, this.state.password))
+        if (this.props.users.error === null) {
+            // 成功
+            // ログイン処理
+            console.log(this.props.users.userId);
+        } else {
+            // 失敗
+            alert('ユーザ登録に失敗しました')
+            console.log(this.props.users.error);
+        }
     }
 }
 
 const styles = theme => ({
+    root: {
+        textAlign: 'center'
+    },
     card: {
         marginTop: theme.spacing.unit,
         marginBottom: theme.spacing.unit,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: '60%',
-        minWidth: 275,
+        display: 'inline-block',
+        textAlign: 'left',
+        minWidth: 275
     },
     textField: {
         marginLeft: theme.spacing.unit,
@@ -90,7 +100,7 @@ const styles = theme => ({
     },
     button: {
         margin: theme.spacing.unit,
-    },
+    }
 });
 
-export default connect()(withStyles(styles)(Registration));
+export default connect( state => state )(withStyles(styles)(Registration));

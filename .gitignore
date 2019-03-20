@@ -1,5 +1,6 @@
 db/data/*
-server/src/user_guide/*
+server/slim-project/credentials/*
+server/slim-project/vendor
 
 # Logs
 logs

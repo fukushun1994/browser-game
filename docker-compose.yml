@@ -5,7 +5,8 @@ services:
     ports:
       - "8888:80"
     volumes:
-      - ./server/src:/var/www/html
+      - ./server/slim-project:/var/www/html
+      - ./server/config/apache2/sites-available:/etc/apache2/sites-available
     links:
       - db
   db:

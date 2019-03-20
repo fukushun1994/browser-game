@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Card, CardHeader, CardContent, Button, TextField, Typography } from '@material-ui/core';
+import { Card, CardHeader, CardContent, Button, TextField, Typography, Dialog, CircularProgress } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { REGISTER_USER } from '../constants/ActionTypes'
 import { registerUser } from '../actions';
@@ -23,40 +23,45 @@ class Registration extends Component {
 
     render() {
         const classes = this.props.classes
+
         return (
-            <Card className={classes.card}>
-                <CardContent>
-                    <Typography variant="h5">ユーザ登録</Typography>
-                    <TextField
-                        label="ユーザ名"
-                        className={classes.textField}
-                        value={this.state.name}
-                        margin="normal"
-                        onChange={this.handleChange('name')}
-                        helperText="半角英数字 3文字以上32文字以下"
-                        error={this.state.name && !this.validateName()}
-                    />
-                    <TextField
-                        label="パスワード"
-                        className={classes.textField}
-                        value={this.state.password}
-                        margin="normal"
-                        type="password"
-                        onChange={this.handleChange('password')}
-                        helperText="半角英数字 6文字以上"
-                        error={this.state.password && !this.validatePassword()}
-                    />
-                    <Button
-                        className={classes.button}
-                        variant="contained"
-                        color="primary"
-                        onClick={() => this.onRegister()}
-                        disabled={!this.validateName() || !this.validatePassword()}
-                    >
-                        登録
-                    </Button>
-                </CardContent>
-            </Card>
+            <div className={classes.root}>
+                <Card className={classes.card}>
+                    <CardContent>
+                        <Typography variant="h5">ユーザ登録</Typography>
+                        <TextField
+                            label="ユーザ名"
+                            className={classes.textField}
+                            value={this.state.name}
+                            margin="normal"
+                            onChange={this.handleChange('name')}
+                            helperText="半角英数字 3文字以上32文字以下"
+                            error={this.state.name && !this.validateName()}
+                        />
+                        <TextField
+                            label="パスワード"
+                            className={classes.textField}
+                            value={this.state.password}
+                            margin="normal"
+                            type="password"
+                            onChange={this.handleChange('password')}
+                            helperText="半角英数字 6文字以上"
+                            error={this.state.password && !this.validatePassword()}
+                        />
+                        <Button
+                            className={classes.button}
+                            variant="contained"
+                            color="primary"
+                            onClick={() => this.onRegister()}
+                            disabled={this.props.users.isRegistering || !this.validateName() || !this.validatePassword()}
+                        >
+                            { this.props.users.isRegistering ?
+                                <CircularProgress size={25} color="primary"/>
+                                : '登録'}
+                        </Button>
+                    </CardContent>
+                </Card>
+            </div>
         )
     }
 

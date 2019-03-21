@@ -24,7 +24,8 @@ class Header extends Component {
             <Typography className={classes.grow} variant="h6" color="inherit">
               <Link to="/" style={{ textDecoration: "none", color: "white"}} >ブラウザハクスラ（仮）</Link>
             </Typography>
-            { this.props.users.isLoggedIn ? <Button type="button" color="inherit" onClick={ () => this.onLogout() }>ログアウト</Button> : '' }
+            { this.props.users.isLoggedIn ? <Typography variant="h7" color="inherit">{ this.props.users.userName }</Typography> : ''}
+            { this.props.users.isLoggedIn ? <Button type="button" color="inherit" onClick={ () => this.onLogout() }>ログアウト</Button> : ''}
           </Toolbar>
         </AppBar>
       </div>

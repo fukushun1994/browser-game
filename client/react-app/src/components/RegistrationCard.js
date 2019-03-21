@@ -76,22 +76,11 @@ class RegistrationCard extends Component {
     }
 
     async onRegister() {
-        await this.props.dispatch(registerUser(this.state.name, this.state.password));
-        if (this.props.users.error === null) {
-            // ログイン処理
-            await this.props.dispatch(login(this.state.name, this.state.password));
-            if (this.props.users.error === null) {
-                // トークンをlocalStorageに格納
-                localStorage.setItem('token', this.props.users.token);
-            } else {
-                // ログイン失敗
-                alert('ログインに失敗しました');
-                console.log(this.props.users.error);
-            }
-        } else {
-            // ユーザ登録失敗
-            alert('ユーザ登録に失敗しました')
-            console.log(this.props.users.error);
+        try {
+            await this.props.dispatch(registerUser(this.state.name, this.state.password));
+            this.props.dispatch(login(this.state.name, this.state.password));
+        } catch (error) {
+            console.log(error);
         }
     }
 }

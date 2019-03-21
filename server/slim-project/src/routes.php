@@ -23,7 +23,8 @@ $app->post('/users', function (Request $request, Response $response, array $args
     if ($result) {
         return $response->withJson(
             [
-                'user_id' => $db->lastInsertId()
+                'user_id' => $db->lastInsertId(),
+                'user_name' => $parsedBody['user_name']
             ],
             200
         );
@@ -53,14 +54,21 @@ $app->post('/login', function (Request $request, Response $response, array $args
             'nbf' => $currentTime,
             'exp' => $currentTime + $EXP,
             'user_id' => (int)$row['id'],
+            'user_name' => $parsedBody['user_name']
         ];
         $private_key = file_get_contents('../credentials/jwt.key');
         $token = JWT::encode($claims, $private_key, 'RS256');
         return $response->withJson(
             [
-                'token_type' => 'bearer',
-                'access_token' => $token,
-                'expires_in' => $EXP,
+                'token' => [
+                    'token_type' => 'bearer',
+                    'access_token' => $token,
+                    'expires_in' => $EXP,
+                ],
+                'user' => [
+                    'user_id' => (int)$parsedBody['user_id'],
+                    'user_name' => $parsedBody['user_name']
+                ]
             ],
             200
         );
@@ -71,27 +79,38 @@ $app->post('/login', function (Request $request, Response $response, array $args
 
 $auth_middleware = function ($req, $res, $next) {
     if (!$req->hasHeader('Authorization')) {
-        return $response->withStatus(401);
+        return $res->withStatus(401);
     }
     $header = $req->getHeader('Authorization');
-    if (!preg_match('/^Bearer (.*)$/', $header, $matches)) {
-        return $response->withStatus(401);
+    if (!preg_match('/^Bearer (.*)$/', $header[0], $matches)) {
+        return $res->withStatus(401);
     }
-    $token = $matches[0];
+    $token = $matches[1];
     $public_key = file_get_contents('../credentials/jwt.key.pub');
 
     // デコード
     try {
         $claims = JWT::decode($token, $public_key, array('RS256'));
     } catch (Exception $e) {
-        return $response->withStatus(401);
+        return $res->withStatus(401);
     }
-    $user_id = $claims['user_id'];
-    $req = $req->withAttribute('user_id', $user_id);
+    $req = $req->withAttribute('user_id', $claims->user_id);
+    $req = $req->withAttribute('user_name', $claims->user_name);
     return $next($req, $res);
 };
 
 // 認証が必要なAPIグループ
 $app->group('', function ($app) {
-
+    // tokenのverifyを行う
+    $app->get('/login', function (Request $request, Response $response, array $args) {
+        $user_id = (int)$request->getAttribute('user_id');
+        $user_name = $request->getAttribute('user_name');
+        return $response->withJson(
+            [
+                'user_id' => $user_id,
+                'user_name' => $user_name
+            ],
+            200
+        );
+    });
 })->add($auth_middleware);

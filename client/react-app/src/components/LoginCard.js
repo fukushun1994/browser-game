@@ -74,16 +74,7 @@ class LoginCard extends Component {
     }
 
     async onLogin() {
-        // ログイン処理
-        await this.props.dispatch(login(this.state.name, this.state.password));
-        if (this.props.users.error === null) {
-            // トークンをlocalStorageに格納
-            localStorage.setItem('token', this.props.users.token);
-        } else {
-            // ログイン失敗
-            alert('ログインに失敗しました');
-            console.log(this.props.users.error);
-        }
+        this.props.dispatch(login(this.state.name, this.state.password))
     }
 }
 

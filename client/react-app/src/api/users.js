@@ -1,16 +1,19 @@
-import { apiBase } from './base'
+import { apiBase, apiWithToken } from './base'
 
 export default {
-    registerUser: (user_name, password) => {
+    registerUser: (userName, password) => {
         return apiBase.post('/users', {
-            user_name: user_name,
+            user_name: userName,
             password: password
         })
     },
-    login: (user_name, password) => {
+    login: (userName, password) => {
         return apiBase.post('/login', {
-            user_name: user_name,
+            user_name: userName,
             password: password
-        })
+        });
+    },
+    loginUsingToken: () => {
+        return apiWithToken.get('/login');
     }
 }

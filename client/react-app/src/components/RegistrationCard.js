@@ -25,7 +25,7 @@ class RegistrationCard extends Component {
         const classes = this.props.classes
 
         return (
-            <Card className={classes.card}>
+            <Card>
                 <CardContent>
                     <Typography variant="h5">ユーザ登録</Typography>
                     <TextField
@@ -86,13 +86,6 @@ class RegistrationCard extends Component {
 }
 
 const styles = theme => ({
-    card: {
-        margin: theme.spacing.unit,
-        display: 'inline-block',
-        textAlign: 'left',
-        verticalAlign: 'top',
-        minWidth: 275
-    },
     textField: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,

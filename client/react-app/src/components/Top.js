@@ -15,8 +15,8 @@ class Top extends Component {
         } else {
             return (
                 <div style={{textAlign: 'center'}}>
-                    <RegistrationCard />
                     <LoginCard />
+                    <RegistrationCard />
                 </div>
             );
         }

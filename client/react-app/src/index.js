@@ -8,6 +8,7 @@ import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 
 const store = createStore(
     reducer,
@@ -17,9 +18,25 @@ const store = createStore(
     )
 );
 
+const theme = createMuiTheme({
+    overrides: {
+        MuiCard: {
+            root: {
+                margin: 8,
+                display: 'inline-block',
+                textAlign: 'left',
+                verticalAlign: 'top',
+                minWidth: 275
+            }
+        }
+    }
+});
+
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <MuiThemeProvider theme={theme}>
+            <App />
+        </MuiThemeProvider>
     </Provider>,
     document.getElementById('root')
 );

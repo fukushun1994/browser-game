@@ -3,6 +3,7 @@ import RegistrationCard from './RegistrationCard';
 import LoginCard from './LoginCard';
 import { connect } from 'react-redux';
 import StatusCard from './StatusCard';
+import QuestCard from './QuestCard';
 
 class Top extends Component {
     render() {
@@ -10,6 +11,7 @@ class Top extends Component {
             return (
                 <div>
                     <StatusCard />
+                    <QuestCard />
                 </div>
             );
         } else {

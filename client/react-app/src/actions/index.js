@@ -63,7 +63,7 @@ export const login = (userName, password) => {
         dispatch(requestLogin());
         try {
             const response = await UsersAPI.login(userName, password);
-            localStorage.setItem('token', response.data.access_token);
+            localStorage.setItem('token', response.data.token.access_token);
             dispatch(receiveLogin(response));
             return Promise.resolve(response);
         } catch (error) {

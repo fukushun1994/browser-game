@@ -1,12 +1,14 @@
 const axios = require('axios');
 
+const HOST = 'http://192.168.99.101:8888/index.php'
+
 export const apiBase = axios.create({
-    baseURL: 'http://localhost:8888/index.php',
+    baseURL: HOST,
     timeout: 10000,
 });
 
 const apiWithToken = axios.create({
-    baseURL: 'http://localhost:8888/index.php',
+    baseURL: HOST,
     timeout: 10000,
 });
 apiWithToken.interceptors.request.use((config) => {

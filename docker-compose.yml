@@ -5,8 +5,7 @@ services:
     ports:
       - "8888:80"
     volumes:
-      - ./server/slim-project:/var/www/html
-      - ./server/config/apache2/sites-available:/etc/apache2/sites-available
+      - /workspace/browser-game/server/slim-project:/var/www/html
     links:
       - db
   db:
@@ -14,9 +13,8 @@ services:
     ports:
       - "3306"
     volumes:
-      - ./db/data:/var/lib/mysql
-      - ./db/initdb.d:/docker-entrypoint-initdb.d
-      - ./db/conf.d:/etc/mysql/conf.d
+      - /workspace/browser-game/db/data:/var/lib/mysql
+      - /workspace/browser-game/db/initdb.d:/docker-entrypoint-initdb.d
     environment:
       MYSQL_DATABASE: browser_game
       MYSQL_USER: user
@@ -27,6 +25,7 @@ services:
     ports:
       - "8080:3000"
     volumes:
-      - ./client:/app
+      - /workspace/browser-game/client:/app
+      - /app/react-app/node_modules
     tty: true
 

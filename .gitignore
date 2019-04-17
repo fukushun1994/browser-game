@@ -1,6 +1,6 @@
 db/data/*
 server/slim-project/credentials/*
-server/slim-project/vendor
+server/slim-project/vendor/*
 
 # Logs
 logs

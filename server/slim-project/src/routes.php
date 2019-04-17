@@ -35,7 +35,6 @@ $app->post('/users', function (Request $request, Response $response, array $args
 
 // login
 $app->post('/login', function (Request $request, Response $response, array $args) {
-
     $db = $this->db;
     $parsedBody = $request->getParsedBody();
     
